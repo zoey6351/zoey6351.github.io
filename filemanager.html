@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.5.0',
+    sidebar: {"position":"left","width":240,"display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="FileBrowser 是基于Caddy 的扩展。它提供文件管理界面，可用于 上传/下载/删除/预览和重命名 等该目录中的文件。">
+<meta name="keywords" content="私人网盘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用Caddy FileBrowser扩展部署私人网盘">
+<meta property="og:url" content="https://lixint.github.io/filemanager.html">
+<meta property="og:site_name" content="LixT&#39;s Blog">
+<meta property="og:description" content="FileBrowser 是基于Caddy 的扩展。它提供文件管理界面，可用于 上传/下载/删除/预览和重命名 等该目录中的文件。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-26T06:40:11.210Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用Caddy FileBrowser扩展部署私人网盘">
+<meta name="twitter:description" content="FileBrowser 是基于Caddy 的扩展。它提供文件管理界面，可用于 上传/下载/删除/预览和重命名 等该目录中的文件。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://lixint.github.io/filemanager.html">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用Caddy FileBrowser扩展部署私人网盘 | LixT's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LixT's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">不务正业的日子</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    <div class="header-inner">
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-博客搭建教程">
+    <a href="/hexo-blog.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-globe"></i> <br>博客搭建教程</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+</div>
+    
+
+    
+
+
+    
+  
+  
+  
+    <style type="text/css">
+      .container .main-inner {width: auto;padding: auto;}
+      .content-wrap {
+          float: right;
+          position: relative;
+          right: 10%;
+          margin-left:auto;
+          margin-right:auto;
+      }
+      .sidebar {
+        margin-left: 10% !important;
+        float: left !important;
+        bottom: auto;
+      }
+    </style>
+  
+
+  
+  <style type="text/css">
+    p {margin: 0 0 0 0 !important;}
+  </style>
+  
+
+  
+
+    <main id="main" class="main">
+      <div class="main-inner">
+      
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="LixT">
+            
+              <p class="site-author-name" itemprop="name">LixT</p>
+              <p class="site-description motion-element" itemprop="description">Record & Share</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                    <span class="exturl" data-url="https://github.com/lixint" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</span>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                    <span class="exturl" data-url="mailto:li.xint8@gmail.com" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</span>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+					           
+                    <a href="http://techrecord.pw" rel="external nofollow" title="外面的世界">深坑</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+					           
+                    <a href="https://koakie.com" rel="external nofollow" title="koakie">koakie</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Caddy-FileBrowser扩展介绍"><span class="nav-number">1.</span> <span class="nav-text">Caddy FileBrowser扩展介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Caddy"><span class="nav-number">2.</span> <span class="nav-text">安装 Caddy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-Caddy"><span class="nav-number">3.</span> <span class="nav-text">配置 Caddy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置示例"><span class="nav-number">3.1.</span> <span class="nav-text">配置示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#IP-HTTP"><span class="nav-number">3.1.1.</span> <span class="nav-text">IP HTTP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#域名-HTTP"><span class="nav-number">3.1.2.</span> <span class="nav-text">域名 HTTP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#域名-HTTPS"><span class="nav-number">3.1.3.</span> <span class="nav-text">域名 HTTPS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#域名-HTTP重定向-HTTPS-仅手动指定SSL证书和密匙"><span class="nav-number">3.1.4.</span> <span class="nav-text">域名 HTTP重定向 HTTPS(仅手动指定SSL证书和密匙)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FileBrowser-使用说明"><span class="nav-number">4.</span> <span class="nav-text">FileBrowser 使用说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#切换中文"><span class="nav-number">4.1.</span> <span class="nav-text">切换中文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用技巧"><span class="nav-number">4.2.</span> <span class="nav-text">使用技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Caddy-使用说明"><span class="nav-number">5.</span> <span class="nav-text">Caddy 使用说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#升级FileBrowser"><span class="nav-number">5.1.</span> <span class="nav-text">升级FileBrowser</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卸载"><span class="nav-number">6.</span> <span class="nav-text">卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他说明"><span class="nav-number">7.</span> <span class="nav-text">其他说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动显示成功，但是实际未运行"><span class="nav-number">7.1.</span> <span class="nav-text">启动显示成功，但是实际未运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单网站-多网站"><span class="nav-number">7.2.</span> <span class="nav-text">单网站/多网站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caddy下载文件频繁中断"><span class="nav-number">7.3.</span> <span class="nav-text">Caddy下载文件频繁中断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caddy启动失败，打开-http-ip-显示的是-It-works"><span class="nav-number">7.4.</span> <span class="nav-text">Caddy启动失败，打开 http://ip 显示的是 It works !</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动-Caddy后，无法访问"><span class="nav-number">7.5.</span> <span class="nav-text">启动 Caddy后，无法访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FileBrowser账号密码忘了或想要重置账号信息"><span class="nav-number">7.6.</span> <span class="nav-text">FileBrowser账号密码忘了或想要重置账号信息</span></a></li></ol></li></ol></div>
+                       
+          </div>
+
+          <ul class="links-of-blogroll-list">
+          
+            <li class="links-of-blogroll-item">
+            
+              <a href="https://mo.m.taobao.com/union/1111_quan?pid=mm_122376214_176800399_51093450276" rel="external nofollow" title="undefined"><img src="https://i.loli.net/2018/12/06/5c08fc799da64.png" alt="淘宝大额优惠券" title="淘宝大额优惠券榜单"></a>
+            </li>
+          
+          </ul>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      
+
+      
+      
+
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lixint.github.io/filemanager.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LixT">
+      <meta itemprop="description" content="Record & Share">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LixT's Blog">
+    </span>
+
+    
+      <header class="post-header">
+        
+        
+          <h2 class="post-title" itemprop="name headline">利用Caddy FileBrowser扩展部署私人网盘
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time itemprop="dateCreated datePublished" datetime="2018-12-26T13:06:45+08:00">2018-12-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/VPS/" itemprop="url" rel="index"><span itemprop="name">VPS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/filemanager.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/filemanager.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/filemanager.html" class="leancloud_visitors" data-flag-title="利用Caddy FileBrowser扩展部署私人网盘">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">FileBrowser 是基于Caddy 的扩展。它提供文件管理界面，可用于 上传/下载/删除/预览和重命名 等该目录中的文件。</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        
+      
+      
+
+      
+        <p><hr style="margin: 10px 0"><em>本文最后更新于<b style="color:#ff0033">2018年12月26日14:40</b>可能会因为没有更新而失效，如已失效或需要修正，请留言！</em><hr style="margin: 10px 0"></p>
+<h3 id="Caddy-FileBrowser扩展介绍"><a href="#Caddy-FileBrowser扩展介绍" class="headerlink" title="Caddy FileBrowser扩展介绍"></a>Caddy FileBrowser扩展介绍</h3><p>FileBrowser 是基于Caddy 的扩展。它提供文件管理界面，可用于 上传/下载/删除/预览和重命名 等该目录中的文件。</p>
+<blockquote>
+<p>支持 上传文件<br>支持 按类型 搜索文件<br>支持 批量压缩 文件下载<br>支持 多用户管理(权限可控)<br>支持 在网页执行 Linux命令<br>支持 创建 共享链接(限时/永久)<br>支持 在线编辑 各类文本文件<br>支持 在线浏览 图片/文本/视频等<br>支持 新建/重命名/移动/删除 文件和文件夹等<br>部署简单，几步完成，无需任何依赖环境<br>等等 …</p>
+</blockquote>
+<p><strong>Caddy 文档：</strong><a href="https://caddyserver.com/docs/http.filemanager" target="_blank" rel="noopener">https://caddyserver.com/docs/http.filemanager</a></p>
+<p><strong>Github 项目：</strong><a href="https://github.com/filebrowser/filebrowser" target="_blank" rel="noopener">https://github.com/filebrowser/filebrowser</a></p>
+<h3 id="安装-Caddy"><a href="#安装-Caddy" class="headerlink" title="安装 Caddy"></a>安装 Caddy</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/lixint/blogfile/master/caddy_install.sh &amp;&amp; chmod +x caddy_install.sh &amp;&amp; bash caddy_install.sh install http.filemanager</span><br><span class="line"><span class="meta">#</span> 如果你要同时安装多个 Caddy 插件，那么请修改下面的命令格式为：</span><br><span class="line"><span class="meta">#</span> bash caddy_install.sh install http.filemanager,http.xxx,http.xxx</span><br><span class="line"><span class="meta">#</span> 英文半角逗号分隔多个插件名称</span><br><span class="line"><span class="meta">#</span> 注意并不能单独安装一个扩展，所以如果你要新安装扩展，请执行上面的命令安装 Caddy 并加上你要安装的所有扩展的名称</span><br></pre></td></tr></table></figure>
+<p>安装Caddy成功后，继续新建一个用于使用的虚拟主机文件夹，例如 <strong>file</strong>（可以自己改）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/caddy/www &amp;&amp; mkdir /usr/local/caddy/www/file</span><br></pre></td></tr></table></figure>
+<h3 id="配置-Caddy"><a href="#配置-Caddy" class="headerlink" title="配置 Caddy"></a>配置 Caddy</h3><p>首先，我们先讲一下，FileBrowser扩展各个参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">filemanager [url] [scope] &#123;</span><br><span class="line"> database path</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li><strong>url</strong> 是要设置的网站URL。默认是 <code>/</code> (比如 <code>/disk</code> 那么访问入口就是 <code>http://ip/disk</code> )。</li>
+<li><strong>scope</strong> 是要浏览的服务器文件目录路径，可以使相对或绝对路径。默认是 <code>./</code> (服务器上面文件的绝对或相对路径)。</li>
+<li><strong>database path</strong> 是 filemanager 的数据库路径（如果不写这个参数，则默认就是 <strong>/usr/local/caddy/filemanager.db</strong>）</li>
+</ol>
+</blockquote>
+<h4 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h4><p>以下示例中，虚拟主机文件夹皆为 <code>/usr/local/caddy/www/file</code></p>
+<p>示例域名皆为 <code>example.com</code></p>
+<h5 id="IP-HTTP"><a href="#IP-HTTP" class="headerlink" title="IP HTTP"></a>IP HTTP</h5><p>本示例是，绑定虚拟主机为IP（即通过IP访问），HTTP协议（80端口）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 以下全部内容是一个整体，是一个命令，修改后全部复制粘贴到SSH软件中并一起执行！</span><br><span class="line">echo &quot;:80 &#123;</span><br><span class="line"> root /usr/local/caddy/www/file</span><br><span class="line"> timeouts none</span><br><span class="line"> gzip</span><br><span class="line"> filemanager / /usr/local/caddy/www/file &#123;</span><br><span class="line">  database /usr/local/caddy/filemanager.db</span><br><span class="line"> &#125;</span><br><span class="line">&#125;&quot; &gt; /usr/local/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
+<h5 id="域名-HTTP"><a href="#域名-HTTP" class="headerlink" title="域名 HTTP"></a>域名 HTTP</h5><p>本示例是，绑定虚拟主机为域名（即通过域名访问），HTTP协议（80端口）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 以下全部内容是一个整体，是一个命令，修改后全部复制粘贴到SSH软件中并一起执行（注意替换示例域名）！</span><br><span class="line">echo &quot;http://example.com &#123;</span><br><span class="line"> root /usr/local/caddy/www/file</span><br><span class="line"> timeouts none</span><br><span class="line"> gzip</span><br><span class="line"> filemanager / /usr/local/caddy/www/file &#123;</span><br><span class="line">  database /usr/local/caddy/filemanager.db</span><br><span class="line"> &#125;</span><br><span class="line">&#125;&quot; &gt; /usr/local/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
+<h5 id="域名-HTTPS"><a href="#域名-HTTPS" class="headerlink" title="域名 HTTPS"></a>域名 HTTPS</h5><p>本示例是，绑定虚拟主机为域名（即通过域名访问），HTTPS协议（443端口）。</p>
+<p>如果你有 SSL证书和密匙的话，把 SSL证书(xxx.crt)和密匙(xxx.key)文件放到<code>/root</code>文件夹下（也可以是其他文件夹，自己改下面代码），然后这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 以下全部内容是一个整体，是一个命令，修改后全部复制粘贴到SSH软件中并一起执行（注意替换示例域名）！</span><br><span class="line">echo &quot;example.com &#123;</span><br><span class="line"> root /usr/local/caddy/www/file</span><br><span class="line"> timeouts none</span><br><span class="line"> tls /root/xxx.crt /root/xxx.key</span><br><span class="line"> gzip</span><br><span class="line"> filemanager / /usr/local/caddy/www/file &#123;</span><br><span class="line">  database /usr/local/caddy/filemanager.db</span><br><span class="line"> &#125;</span><br><span class="line">&#125;&quot; &gt; /usr/local/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
+<p>如果你没有 SSL证书和密匙，那么你可以这样做：</p>
+<p>下面的<code>xxxx@xxx.xx</code>改成你的邮箱，同时需要注意的是，申请 SSL证书前，<strong>请务必提前解析好域名记录(解析后最好等一会，以全球生效)，否则 Caddy会申请并配置失败！</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 以下全部内容是一个整体，是一个命令，修改后全部复制粘贴到SSH软件中并一起执行（注意替换示例域名）！</span><br><span class="line">echo &quot;example.com &#123;</span><br><span class="line"> root /usr/local/caddy/www/file</span><br><span class="line"> timeouts none</span><br><span class="line"> tls xxxx@xxx.xx</span><br><span class="line"> gzip</span><br><span class="line"> filemanager / /usr/local/caddy/www/file &#123;</span><br><span class="line">  database /usr/local/caddy/filemanager.db</span><br><span class="line"> &#125;</span><br><span class="line">&#125;&quot; &gt; /usr/local/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
+<h5 id="域名-HTTP重定向-HTTPS-仅手动指定SSL证书和密匙"><a href="#域名-HTTP重定向-HTTPS-仅手动指定SSL证书和密匙" class="headerlink" title="域名 HTTP重定向 HTTPS(仅手动指定SSL证书和密匙)"></a>域名 HTTP重定向 HTTPS(仅手动指定SSL证书和密匙)</h5><p>本示例是，域名HTTP重定向为HTTPS。</p>
+<p>当你是手动指定 SSL证书和密匙 来配置的话，Caddy只会监听 443端口(https)，并不会自动设置 80端口(http)的重定向，如果要做重定向的话，可以这样做：</p>
+<p>下面的示例代码中，是把 <a href="http://example.com" target="_blank" rel="noopener">http://example.com</a> 重定向到了 <a href="https://example.com" target="_blank" rel="noopener">https://example.com</a> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 以下全部内容是一个整体，是一个命令，修改后全部复制粘贴到SSH软件中并一起执行（注意替换示例域名）！</span><br><span class="line">echo &quot;http://toyoo.pw &#123;</span><br><span class="line"> timeouts none</span><br><span class="line"> redir https://toyoo.pw&#123;url&#125;</span><br><span class="line">&#125;</span><br><span class="line">toyoo.pw &#123;</span><br><span class="line"> root /usr/local/caddy/www/file</span><br><span class="line"> timeouts none</span><br><span class="line"> tls /root/xxx.crt /root/xxx.key</span><br><span class="line"> gzip</span><br><span class="line"> filemanager / /usr/local/caddy/www/file &#123;</span><br><span class="line">  database /usr/local/caddy/filemanager.db</span><br><span class="line"> &#125;</span><br><span class="line">&#125;&quot; &gt; /usr/local/caddy/Caddyfile</span><br></pre></td></tr></table></figure>
+<p>当你已经配置完上面步骤后，那就需要启动Caddy了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/caddy start</span><br><span class="line"># 如果启动失败可以看Caddy日志： tail -f /tmp/caddy.log</span><br></pre></td></tr></table></figure>
+<h3 id="FileBrowser-使用说明"><a href="#FileBrowser-使用说明" class="headerlink" title="FileBrowser 使用说明"></a>FileBrowser 使用说明</h3><p>配置并打开网站后，默认账号和密码都是 <strong>admin</strong>，可以登陆后修改。<strong>[Settings]</strong></p>
+<h4 id="切换中文"><a href="#切换中文" class="headerlink" title="切换中文"></a>切换中文</h4><p>进入后可以点击左边侧栏 <strong>[Settings]</strong> 进入设置页面，然后选择 <strong>[language - Chinese (Simplified)]</strong> ，并点击右下角第一个 <strong>[Update]</strong> 按钮更新。</p>
+<h4 id="使用技巧"><a href="#使用技巧" class="headerlink" title="使用技巧"></a>使用技巧</h4><p>一些按键有对应的作用：</p>
+<ol>
+<li><strong>F1</strong> - 查看帮助</li>
+<li><strong>F2</strong> - 重命名 文件/文件夹</li>
+<li><strong>DEL</strong> - 删除所选 文件/文件夹</li>
+<li><strong>ESC</strong> - 清除当前选择 或 关闭提示</li>
+<li><strong>CTRL + S</strong> - 保存下载 文件/文件夹（zip压缩）</li>
+<li><strong>CTRL + 鼠标左键 单击</strong> - 选择多个文件/文件夹</li>
+<li><strong>鼠标左键 双击</strong> - 打开文件/文件夹</li>
+<li><strong>鼠标左键 单击</strong> - 选择文件/文件夹</li>
+</ol>
+<h3 id="Caddy-使用说明"><a href="#Caddy-使用说明" class="headerlink" title="Caddy 使用说明"></a>Caddy 使用说明</h3><p><strong>启动：</strong><code>/etc/init.d/caddy start</code></p>
+<p><strong>停止：</strong><code>/etc/init.d/caddy stop</code></p>
+<p><strong>重启：</strong><code>/etc/init.d/caddy restart</code></p>
+<p><strong>查看状态：</strong><code>/etc/init.d/caddy status</code></p>
+<p><strong>查看Caddy启动日志：</strong> <code>tail -f /tmp/caddy.log</code></p>
+<p><strong>Caddy配置文件位置：</strong><code>/usr/local/caddy/Caddyfile</code></p>
+<p><strong>FileBrowser数据库位置：</strong><code>/usr/local/caddy/filemanager.db</code></p>
+<p><strong>Caddy自动申请SSL证书位置：</strong><code>/.caddy/acme/acme-v02.api.letsencrypt.org/sites/xxx.xxx(域名)/</code></p>
+<h4 id="升级FileBrowser"><a href="#升级FileBrowser" class="headerlink" title="升级FileBrowser"></a>升级FileBrowser</h4><p>因为FileBrowser是Caddy的扩展，是融合成一个文件的，升级FileBrowser=升级Caddy（加扩展），所以只需要重新执行下面的命令覆盖安装Caddy即可<strong>（只会覆盖 Caddy自身，不影响配置文件）</strong>，覆盖安装后启动Caddy即可（ <code>/etc/init.d/caddy start</code> ）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/lixint/blogfile/master/caddy_install.sh &amp;&amp; chmod +x caddy_install.sh &amp;&amp; bash caddy_install.sh install http.filemanager</span><br></pre></td></tr></table></figure>
+<h3 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h3><p>只需要把安装命令 <strong>install</strong> 改成 <strong>uninstall</strong> 就是卸载了，因为扩展是集成于Caddy中的，所以无法单独卸载某个扩展。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/lixint/blogfile/master/caddy_install.sh &amp;&amp; chmod +x caddy_install.sh &amp;&amp; bash caddy_install.sh uninstall</span><br></pre></td></tr></table></figure>
+<h3 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h3><h4 id="启动显示成功，但是实际未运行"><a href="#启动显示成功，但是实际未运行" class="headerlink" title="启动显示成功，但是实际未运行"></a>启动显示成功，但是实际未运行</h4><p>因为 服务脚本判断的问题，只判断了nohub是否运行 Caddy成功，但没有判断 Caddy 是否保持正常运行。</p>
+<p>你可以理解为，nohub成功启动了 Caddy，但是 Caddy因为配置文件错误等原因，启动后又退出了。</p>
+<p>所以这种情况下，你应该去查看启动日志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /tmp/caddy.log</span><br></pre></td></tr></table></figure>
+<h4 id="单网站-多网站"><a href="#单网站-多网站" class="headerlink" title="单网站/多网站"></a>单网站/多网站</h4><p>当然，上面的几个示例，实际上都算是单网站。</p>
+<p>最后一句代码都是 <code>}&quot; &gt; /usr/local/caddy/Caddyfile</code> ，也就是清空了 Caddy配置文件，然后再写入了配置信息。</p>
+<p>如果你要设置多个网站，那么把最后一句代码改成 <code>}&quot; &gt;&gt; /usr/local/caddy/Caddyfile</code> 即可，注意是把 <code>&gt; 改成 &gt;&gt;</code>，这样就不会清空原来的配置信息了，而是会把要添加的配置信息加到配置文件最后！</p>
+<h4 id="Caddy下载文件频繁中断"><a href="#Caddy下载文件频繁中断" class="headerlink" title="Caddy下载文件频繁中断"></a>Caddy下载文件频繁中断</h4><p>可能是因为 Caddy的超时时间机制导致的，可以在配置文件中加入这句代 码<code>timeouts none</code> ，例如这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com ( timeouts none root /home/www ...(省略号代表 这下面的内容是重复的，请不要直接写省略号到配置文件中))</span><br></pre></td></tr></table></figure>
+<h4 id="Caddy启动失败，打开-http-ip-显示的是-It-works"><a href="#Caddy启动失败，打开-http-ip-显示的是-It-works" class="headerlink" title="Caddy启动失败，打开 http://ip 显示的是 It works !"></a>Caddy启动失败，打开 <a href="http://ip" target="_blank" rel="noopener">http://ip</a> 显示的是 It works !</h4><p>一些系统会自带 apache2 ，而 apache2 会占用80端口，导致Caddy无法绑定端口，所以只要关掉就好了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -lntp# 我们可以通过这个命令查看是不是被其他软件占用了 80 端口。</span><br></pre></td></tr></table></figure>
+<p>不过 apache2 会默认开机自启动，如果不需要可以关闭自启动或者卸载 apache2 。</p>
+<p><strong>停止 Apache2</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/apache2 stop# 尝试使用上面这个关闭，如果没效果或者提示什么错误无法关闭，那就用下面这个强行关闭进程。kill -9 $(ps -ef|grep &quot;apache2&quot;|grep -v &quot;grep&quot;|awk &apos;&#123;print $2&#125;&apos;)</span><br></pre></td></tr></table></figure>
+<p><strong>取消开机自启动</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 以下代码仅限 Debian/Ubuntu 系统 #update-rc.d -f apache2 remove</span><br></pre></td></tr></table></figure>
+<p><strong>卸载 Apache2</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 以下代码仅限 Debian/Ubuntu 系统 #apt-get remove --purge apache2</span><br></pre></td></tr></table></figure>
+<p>关闭 Apache2后，就可以尝试启动 Caddy ，并试试能不能打开网页。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/caddy start</span><br></pre></td></tr></table></figure>
+<h4 id="启动-Caddy后，无法访问"><a href="#启动-Caddy后，无法访问" class="headerlink" title="启动 Caddy后，无法访问"></a>启动 Caddy后，无法访问</h4><p>这个可能是防火墙的问题，开放防火墙端口即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 端口 -j ACCEPTiptables -I INPUT -m state --state NEW -m udp -p udp --dport 端口 -j ACCEPT # 删除防火墙规则，内容一样把 -I 换成 -D 就行了：iptables -D INPUT -m state --state NEW -m tcp -p tcp --dport 端口 -j ACCEPTiptables -D INPUT -m state --state NEW -m udp -p udp --dport 端口 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<h4 id="FileBrowser账号密码忘了或想要重置账号信息"><a href="#FileBrowser账号密码忘了或想要重置账号信息" class="headerlink" title="FileBrowser账号密码忘了或想要重置账号信息"></a>FileBrowser账号密码忘了或想要重置账号信息</h4><p>FileBrowser没有找回密码功能，所以一旦你忘记了密码，那么GG，不过没事 有办法重置。</p>
+<p>当然我们可以重置FileBrowser的数据库文件来清除所有账号信息，这样我们就变成初始账号和密码了(admin/admin)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注意：删除数据库文件只会影响数据库内储存的各账号信息，并不会影响服务器本地的文件夹/文件。</span><br></pre></td></tr></table></figure>
+<p>很简单，关闭Caddy，然后删除FileBrowser数据库文件，启动Caddy，使用初始账号密码登陆。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/caddy stoprm -rf /usr/local/caddy/filemanager.db/etc/init.d/caddy start</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>本文转载自<a href="https://doub.io" rel="noopener" title="愿Toyo平安吧" target="_blank">逗比根据地</a>，转载请注明来源。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得本文对您有帮助，欢迎打赏。</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="LixT 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="LixT 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+
+    
+      <div>
+        
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/私人网盘/" rel="tag"><i class="fa fa-tag" aria-hidden="true"></i>私人网盘</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/pyenv.html" rel="next" title="使用pyenv与virtualenv进行Python多版本与多环境管理">
+                <i class="fa fa-chevron-left"></i> 使用pyenv与virtualenv进行Python多版本与多环境管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/linuxcmd.html" rel="prev" title="Linux常用命令--基础篇">
+                Linux常用命令--基础篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright"> &copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LixT</span>
+
+  
+
+  
+</div>
+
+
+  
+
+<!--底部信息 -->
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+
+
+ 
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/motion.js?v=6.5.0"></script>
+
+
+  
+  
+
+
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/bootstrap.js?v=6.5.0"></script>
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  
+  <script src="//myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz',
+        appKey: 'TRe2e9a0df16Y70fU0xXXOO6',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz",
+                'X-LC-Key': "TRe2e9a0df16Y70fU0xXXOO6",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=6.5.0"></script>
+
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+
+
+</body>
+</html>

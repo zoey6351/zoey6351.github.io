@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.5.0',
+    sidebar: {"position":"left","width":240,"display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="利用OneDrive搭建私人OneIndex网盘并使用Aria2实现下载后自动上传至OneDrive">
+<meta name="keywords" content="OneDrive,OneIndex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传">
+<meta property="og:url" content="https://lixint.github.io/onedrive.html">
+<meta property="og:site_name" content="LixT&#39;s Blog">
+<meta property="og:description" content="利用OneDrive搭建私人OneIndex网盘并使用Aria2实现下载后自动上传至OneDrive">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546505928625.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506138859.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506214546.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506441869.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506465908.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506574290.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509033655.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509109620.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509253099.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506739799.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509329511.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509457924.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509485061.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509549916.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510178760.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510252624.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510284187.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510332230.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511348098.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511404873.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511479881.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511504968.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546507517513.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546507929203.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546508073201.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up1.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up2.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up3.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up4.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up5.png">
+<meta property="og:updated_time" content="2020-03-11T13:27:52.027Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传">
+<meta name="twitter:description" content="利用OneDrive搭建私人OneIndex网盘并使用Aria2实现下载后自动上传至OneDrive">
+<meta name="twitter:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546505928625.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://lixint.github.io/onedrive.html">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传 | LixT's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LixT's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">不务正业的日子</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    <div class="header-inner">
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-博客搭建教程">
+    <a href="/hexo-blog.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-globe"></i> <br>博客搭建教程</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+</div>
+    
+
+    
+
+
+    
+  
+  
+  
+    <style type="text/css">
+      .container .main-inner {width: auto;padding: auto;}
+      .content-wrap {
+          float: right;
+          position: relative;
+          right: 10%;
+          margin-left:auto;
+          margin-right:auto;
+      }
+      .sidebar {
+        margin-left: 10% !important;
+        float: left !important;
+        bottom: auto;
+      }
+    </style>
+  
+
+  
+  <style type="text/css">
+    p {margin: 0 0 0 0 !important;}
+  </style>
+  
+
+  
+
+    <main id="main" class="main">
+      <div class="main-inner">
+      
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="LixT">
+            
+              <p class="site-author-name" itemprop="name">LixT</p>
+              <p class="site-description motion-element" itemprop="description">Record & Share</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                    <span class="exturl" data-url="https://github.com/lixint" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</span>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                    <span class="exturl" data-url="mailto:li.xint8@gmail.com" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</span>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+					           
+                    <a href="http://techrecord.pw" rel="external nofollow" title="外面的世界">深坑</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+					           
+                    <a href="https://koakie.com" rel="external nofollow" title="koakie">koakie</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装宝塔面板"><span class="nav-number">1.</span> <span class="nav-text">安装宝塔面板</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#点击添加网站"><span class="nav-number">1.1.</span> <span class="nav-text">点击添加网站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载OneIndex源码安装授权"><span class="nav-number">1.2.</span> <span class="nav-text">下载OneIndex源码安装授权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改密码与去掉"><span class="nav-number">1.3.</span> <span class="nav-text">修改密码与去掉/?/</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Aria2安装"><span class="nav-number">2.</span> <span class="nav-text">Aria2安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装AriaNg"><span class="nav-number">3.</span> <span class="nav-text">安装AriaNg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Aria2自动上传"><span class="nav-number">4.</span> <span class="nav-text">设置Aria2自动上传</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装脚本"><span class="nav-number">4.1.</span> <span class="nav-text">安装脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取参数"><span class="nav-number">4.2.</span> <span class="nav-text">获取参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行账号认证程序"><span class="nav-number">4.3.</span> <span class="nav-text">运行账号认证程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">4.4.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Aria2自动上传"><span class="nav-number">4.5.</span> <span class="nav-text">Aria2自动上传</span></a></li></ol></li></ol></div>
+                       
+          </div>
+
+          <ul class="links-of-blogroll-list">
+          
+            <li class="links-of-blogroll-item">
+            
+              <a href="https://mo.m.taobao.com/union/1111_quan?pid=mm_122376214_176800399_51093450276" rel="external nofollow" title="undefined"><img src="https://i.loli.net/2018/12/06/5c08fc799da64.png" alt="淘宝大额优惠券" title="淘宝大额优惠券榜单"></a>
+            </li>
+          
+          </ul>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      
+
+      
+      
+
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lixint.github.io/onedrive.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LixT">
+      <meta itemprop="description" content="Record & Share">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LixT's Blog">
+    </span>
+
+    
+      <header class="post-header">
+        
+        
+          <h2 class="post-title" itemprop="name headline">利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time itemprop="dateCreated datePublished" datetime="2019-01-03T16:56:00+08:00">2019-01-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time itemprop="dateModified" datetime="2020-03-11T21:27:52+08:00">2020-03-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/onedrive.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/onedrive.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/onedrive.html" class="leancloud_visitors" data-flag-title="利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">利用OneDrive搭建私人OneIndex网盘并使用Aria2实现下载后自动上传至OneDrive</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        
+      
+      
+
+      
+        <p><hr style="margin: 10px 0"><em>本文最后更新于<b style="color:#ff0033">2020年03月11日21:27</b>可能会因为没有更新而失效，如已失效或需要修正，请留言！</em><hr style="margin: 10px 0"></p>
+<p>准备工作：</p>
+<blockquote>
+<p>1.vps，需要绑定域名的话，可以用<span class="exturl" data-url="aHR0cHM6Ly9tLmRvLmNvL2MvNmYyODMyZmZhY2Rm" title="DigitalOcean"><a>DigitalOcean</a><i class="fa fa-external-link"></i></span>最低价格在5刀每月，支持支付宝，本文中用的就是这个。或者可以用<span class="exturl" data-url="aHR0cHM6Ly93d3cudnVsdHIuY29tLz9yZWY9NzcwMTgwMQ==" title="Vultr"><a>Vultr</a><i class="fa fa-external-link"></i></span>最低在2.5刀每月，以及<span class="exturl" title="阿里云香港"><a>阿里云香港</a> txamd.html 阿里云香港<i class="fa fa-external-link"></i></span> 24块钱一个月，跟前两个差不多。胜在速度快，购买节目跟控制台都是中文。<br>不需要绑定域名的话，可以看看能不能购买<span class="exturl" title="阿里云学生机"><a>阿里云学生机</a> txamd.html 阿里云学生机<i class="fa fa-external-link"></i></span>，10块钱一个月也挺实惠。没法买的话建议还是买Vultr或者DigitalOcean，即能绑定域名，又可以作他用。<br>2.OneDrive，个人版，教育版，企业版都可以。最近正好有活动可以免费撸一个5T的OneDrive，教程看<span class="exturl" data-url="aHR0cHM6Ly91MTkxNDQzODYuY3RmaWxlLmNvbS9mcy8xOTE0NDM4Ni0zMjkxMDgxNDI=" title="免费获得5T OneDrive空间"><a style="color:#ff0033">免费获得5T OneDrive空间</a><i class="fa fa-external-link"></i></span></p>
+</blockquote>
+<h3 id="安装宝塔面板"><a href="#安装宝塔面板" class="headerlink" title="安装宝塔面板"></a>安装宝塔面板</h3><div class="tabs" id="1"><ul class="nav-tabs"><li class="tab active"><a href="#1-1"><p>Centos安装脚本</p></a></li><li class="tab"><a href="#1-2"><p>Ubuntu/Deepin安装脚本</p></a></li><li class="tab"><a href="#1-3"><p>Debian安装脚本</p></a></li><li class="tab"><a href="#1-4"><p>Fedora安装脚本</p></a></li></ul><div class="tab-content"><div class="tab-pane active" id="1-1"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget &amp;&amp; wget -O install.sh http://download.bt.cn/install/install.sh &amp;&amp; sh install.sh</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="1-2"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O install.sh http://download.bt.cn/install/install-ubuntu.sh &amp;&amp; sudo bash install.sh</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="1-3"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O install.sh http://download.bt.cn/install/install-ubuntu.sh &amp;&amp; bash install.sh</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="1-4"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O install.sh http://download.bt.cn/install/install.sh &amp;&amp; bash install.sh</span><br></pre></td></tr></table></figure></div></div></div>
+<p>中间有需要输入Y的地方输入Y进行安装，等待安装完成，</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546505928625.png" alt="1546505928625"></p>
+<p>安装完成后会显示面板管理页和账号密码</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506138859.png" alt="1546506138859"></p>
+<p>根据现实的信息进行访问</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506214546.png" alt="1546506214546"></p>
+<p>进入后系统自动提示安装环境，注意这里的PHP版本需要在5.5以上，Nginx跟PHP是必须安装的，其他可以根据需求进行安装。</p>
+<p>选择好需要安装的环境，点击一键安装。关闭跳出来的消息盒子让他后台自己安装就行了。</p>
+<p>默认的用户名跟密码不好记。我们来重置一下面板的用户名跟密码，选择面板设置</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506441869.png" alt="1546506441869"></p>
+<p>修改下方的用户名跟密码即可，修改完成后记得保存。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506465908.png" alt="1546506465908"></p>
+<p>啊，需要等安装任务完成后才能修改，那我们等待安装完成吧。。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506574290.png" alt="1546506574290"></p>
+<p>安装完成，设置好账户密码，进入面板首页</p>
+<h4 id="点击添加网站"><a href="#点击添加网站" class="headerlink" title="点击添加网站"></a>点击添加网站</h4><p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509033655.png" alt="1546509033655"></p>
+<p>如果有域名的话填写域名，没有的话就直接添加IP地址</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509109620.png" alt="1546509109620"></p>
+<p>点击提交后点击添加旁的管理按钮，找到之前添加的站点，点击网站目录</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509253099.png" alt="1546509253099"></p>
+<h4 id="下载OneIndex源码安装授权"><a href="#下载OneIndex源码安装授权" class="headerlink" title="下载OneIndex源码安装授权"></a>下载OneIndex源码安装授权</h4><p>然后我们来安装oneindex，首先到<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RvbndhL29uZWluZGV4" title="OneIndex项目页面"><a>OneIndex项目页面</a><i class="fa fa-external-link"></i></span>下载程序源码。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546506739799.png" alt="1546506739799"></p>
+<p>下载zip文件到本地即可。</p>
+<p>网站目录中点击上传，把刚才下载的zip源码包上传到网站目录</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509329511.png" alt="1546509329511"></p>
+<p>右键单击，解压</p>
+<p>解压完成后多了一个文件夹，进到文件夹中把里面所有文件都剪切到网站根目录。</p>
+<p>此时打开站点绑定的域名或者ip地址进到OneIndex配置页面，点击下一步。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509457924.png" alt="1546509457924"></p>
+<p>点击获取应用ID和机密，跳转到Microsoft的登录页。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509485061.png" alt="1546509485061"></p>
+<p>登录之前申请好的OneDrive的账户</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546509549916.png" alt="1546509549916"></p>
+<p>登录后显示应用机密，复制填入OneIndex配置页，然后点击下面的<code>知道了，返回到快速启动</code></p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510178760.png" alt="1546510178760"></p>
+<p>复制新页面中的APPid</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510252624.png" alt="1546510252624"></p>
+<p>填写完毕，进行下一步。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510284187.png" alt="1546510284187"></p>
+<p>点击绑定账号，绑定你之前的账号即可。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546510332230.png" alt="1546510332230"></p>
+<p>绑定完成，安装成功</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511348098.png" alt="1546511348098"></p>
+<h4 id="修改密码与去掉"><a href="#修改密码与去掉" class="headerlink" title="修改密码与去掉/?/"></a>修改密码与去掉/?/</h4><p>先进入管理后台进行设置。</p>
+<p>设置去掉<code>/?/</code>，点击保存，进到宝塔面板站点设置。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511404873.png" alt="1546511404873"></p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511479881.png" alt="1546511479881"></p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546511504968.png" alt="1546511504968"></p>
+<p>设置好保存，回到OneIndex进行其他设置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">不建议创建和以下同名的文件夹和文件，否则会导致文件无法查看下载</span></span><br><span class="line">README.md、HEAD.md 、.password 、.deny特殊文件使用</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在文件夹底部添加说明</span></span><br><span class="line">在onedrive的文件夹中添加README.md文件，使用markdown语法。</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在文件夹头部添加说明</span></span><br><span class="line">在onedrive的文件夹中添加HEAD.md 文件，使用markdown语法。</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">加密文件夹</span></span><br><span class="line">在onedrive的文件夹中添加.password文件，填入密码，密码不能为空。</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">禁止访问文件夹</span></span><br><span class="line">在onedrive的文件夹中添加.deny文件，该文件夹被禁止访问。</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">重置全部数据，删除数据库数据</span></span><br><span class="line">php artisan od:reset</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">重置OneDrive登陆账号</span></span><br><span class="line">php artisan od:logout</span><br><span class="line">    </span><br><span class="line"><span class="meta">#</span><span class="bash">升级程序</span></span><br><span class="line">git pull</span><br><span class="line">composer install -vvv</span><br><span class="line">php artisan od:update</span><br></pre></td></tr></table></figure>
+<h3 id="Aria2安装"><a href="#Aria2安装" class="headerlink" title="Aria2安装"></a>Aria2安装</h3><p>这里使用<span class="exturl" data-url="aHR0cHM6Ly9kb3ViLmlv" title="https://doub.io"><a>逗逼根据地</a><i class="fa fa-external-link"></i></span>的脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubiBackup/doubi/master/aria2.sh &amp;&amp; chmod +x aria2.sh &amp;&amp; bash aria2.sh</span><br><span class="line"><span class="meta">#</span><span class="bash">备用地址</span></span><br><span class="line">wget -N --no-check-certificate https://www.moerats.com/usr/shell/Aria2/aria2.sh &amp;&amp; chmod +x aria2.sh &amp;&amp; bash aria2.sh</span><br></pre></td></tr></table></figure>
+<p>这个脚本使用很简单，安装提示的步骤操作即可。安装后记下中间设置的<code>下载路径</code>、<code>端口</code>及<code>密码</code>,也可以根据需要输入命令<code>bash aria2.sh</code>修改配置。</p>
+<h3 id="安装AriaNg"><a href="#安装AriaNg" class="headerlink" title="安装AriaNg"></a>安装AriaNg</h3><p>这一步在宝塔面板中也很简单，跟OneIndex操作一样</p>
+<p>到<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RvbndhL29uZWluZGV4L2FyY2hpdmUvbWFzdGVyLnppcA==" title="https://github.com/donwa/oneindex/archive/master.zip"><i class="fa fa-external-link"></i></span>下载Zip压缩包。</p>
+<p>先添加网站，有域名的话绑定一个域名，如果没有域名的话，端口要跟OneIndex的不同。将压缩包上传至站点目录，解压至站点目录即可，跟OneIndex的操作是相同的。不作赘述。</p>
+<p>配置AriaNg</p>
+<p>打开之前设置的的AriaNg域名，点击AriaNG设置</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546507517513.png" alt="1546507517513"></p>
+<p>例如我安装Aria2的云服务器IP是<code>123.123.123.123</code>，设置的端口是<code>6800</code>，第一行别名随意填</p>
+<p>第二行地址也填上IP地址，端口也改成安装时设置的端口，填写好密钥，其他不用动。</p>
+<p>填写完成后自动保存。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546507929203.png" alt="1546507929203"></p>
+<p>如果设置正确的话，下方的<code>Aria2状态</code>就会变成已连接</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/1546508073201.png" alt="1546508073201"></p>
+<p>到这里，AriaNg的设置就完成了。</p>
+<p>配置Aria2下载后自动上传至OneIndex</p>
+<p>此处的方法与脚本都来自于<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzBvVmljZXJvMC9PbmVEcml2ZQ==" title="https://github.com/0oVicero0/OneDrive"><i class="fa fa-external-link"></i></span></p>
+<h3 id="设置Aria2自动上传"><a href="#设置Aria2自动上传" class="headerlink" title="设置Aria2自动上传"></a>设置Aria2自动上传</h3><h4 id="安装脚本"><a href="#安装脚本" class="headerlink" title="安装脚本"></a>安装脚本</h4><div class="tabs" id="2"><ul class="nav-tabs"><li class="tab active"><a href="#2-1"><p>Ubuntu和Debian系统</p></a></li><li class="tab"><a href="#2-2"><p>Centos系统</p></a></li></ul><div class="tab-content"><div class="tab-pane active" id="2-1"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y curl</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="2-2"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install curl -y</span><br></pre></td></tr></table></figure></div></div></div>
+<p>运行命令安装脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate -qO- "https://raw.githubusercontent.com/0oVicero0/OneDrive/master/OneDrive.sh" |bash</span><br></pre></td></tr></table></figure>
+<p>本脚本需要三个参数<code>Client ID</code>、<code>Secret</code>、<code>Reply URL</code>，均需要在<code>/usr/local/etc/OneDrive/onedrive.cfg</code>文件里修改，参数获取看下面，当然你也可以不用管，跳过参数获取部分进行下一步====&gt;运行账号认证程序</p>
+<h4 id="获取参数"><a href="#获取参数" class="headerlink" title="获取参数"></a>获取参数</h4><p>先访问<a href="https://manage.windowsazure.com/" target="_blank" rel="noopener">Microsoft Azure Management Portal</a>，然后点击左侧菜单栏中的<code>Azure Active Directorg</code>，选择应用注册，再点击页面上方的新应用程序注册。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up1.png" alt="Onedrive_up1"></p>
+<p>输入名称如：<code>OneDrive for Linux</code>，应用程序类型选择<code>Web应用/API</code>，填入登陆<code>URL</code>：<a href="https://login.microsoftonline.com/" target="_blank" rel="noopener">https://login.microsoftonline.com/</a>，再点击创建。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up2.png" alt="Onedrive_up2"></p>
+<p>然后点击刚刚创建的应用程序，复制应用程序<code>ID</code>，即脚本需要的<code>Client ID</code>参数，再点击左上角的设置。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up3.png" alt="Onedrive_up3"></p>
+<p>然后进行如下修改：</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up4.png" alt="Onedrive_up4"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">点击右边的回复URL，将其修改为：https://onedrive.live.com/about/business/，即脚本所需要的Reply URL参数。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">点击所需权限，点击Windows Azure Active Directory确认是否已选中Sign <span class="keyword">in</span> and user profile，如果没有则选中并点击完成。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">点击上方的添加，点击选择API，选中Office 365 SharePoint Online，并点击选择。在选择权限中选中Read user files 和Read and write user files，并点击选择。点击完成按钮，并关掉此小窗口。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">点击密钥，填入密钥描述，如：OneDrive，选择年限1年，点击保存，再复制密匙，即脚本所需要的Secret参数。</span></span><br></pre></td></tr></table></figure>
+<p>不过这里说下密匙(<code>Secret</code>参数)填写的一个坑，由<a href="https://www.234du.com/" target="_blank" rel="noopener">唯一度博主</a>填平。就是当我们获取到带<code>+</code>号的密匙时候，我们需要使用编码符号，把<code>+</code>改成<code>％2B</code>，然后再填入脚本里，不然最后会出现<code>Something went wrong, here is the API response</code>的错误，导致验证失败。</p>
+<h4 id="运行账号认证程序"><a href="#运行账号认证程序" class="headerlink" title="运行账号认证程序"></a>运行账号认证程序</h4><p>运行命令<code>onedrive -a</code>，将返回的网址复制到浏览器打开，再登陆你的<code>OneDrive for Business</code>账号，登陆成功后复制地址栏中的地址(复制包括<code>localhost</code>的所有链接地址)，粘贴到<code>SSH</code>客户端里，敲回车键即可。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/onedrive/Onedrive_up5.png" alt="Onedrive_up5"></p>
+<p>如果返回以下字段：<code>It seems like we have a refresh token, so we are ready to go</code>，那就恭喜你，设置成功!</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">提示：如果你遇到bash: onedrive: command not found错误，则需要找到/usr/local/etc/OneDrive文件夹，修改onedrive和onedrive-d脚本，在第二行都加上export PATH=/usr/local/bin:$PATH代码，再保存就行了。</span><br></pre></td></tr></table></figure>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><div class="tabs" id="3"><ul class="nav-tabs"><li class="tab active"><a href="#3-1"><p>使用命令</p></a></li><li class="tab"><a href="#3-2"><p>命令示范</p></a></li></ul><div class="tab-content"><div class="tab-pane active" id="3-1"><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">onedrive --help</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">####################################################################</span></span></span><br><span class="line">Usage: onedrive [OPTIONS] file1 [file2...]</span><br><span class="line">       onedrive-d folder</span><br><span class="line"> </span><br><span class="line">Options:</span><br><span class="line">  -d, --debug        Enable debug mode</span><br><span class="line">  -a, --authorize    Run authorization process</span><br><span class="line">  -f, --folder       Upload files into this remote folder</span><br><span class="line">  -c, --creat        Creat remote folder."</span><br><span class="line">                     Directory names are separated with a slash, e.g.</span><br><span class="line">                     rootFolder/subFolder</span><br><span class="line">                     Do NOT use a trailing slash!</span><br><span class="line">  -h, --help         Show this help</span><br><span class="line">  -r, --rename       Rename the files during upload</span><br><span class="line">                     For each file you specify you MUST also specify</span><br><span class="line">                     the remote filename as the subsequent parameter</span><br><span class="line">                     Be especially careful with globbing!</span><br><span class="line">  -s, --silent       Silent mode for use in crontab scripts.</span><br><span class="line">                     Return only exit code.</span><br><span class="line">  -ls,--list         Show the itmes in this directory.</span><br><span class="line">  -l, --link         Show the file share link.</span><br><span class="line">      </span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">####################################################################</span></span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="3-2"><p>如果我们要上传<code>/root</code>文件夹里面的<code>moerats.txt</code>，使用命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">此命令默认上传到OneDrive根目录</span></span><br><span class="line">onedrive '/root/moerats.txt'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果上传到指定文件夹，就需要加-f参数</span></span><br><span class="line">onedrive -f RATS '/root/moerats.txt'  #上传到OneDrive根目录的RATS文件夹</span><br><span class="line">onedrive -f RATS/RATS '/root/moerats.txt'  #上传到OneDrive根目录RATS文件夹里的RATS文件夹</span><br></pre></td></tr></table></figure>
+<p>如果我们要将<code>/root</code>文件夹及里面的文件夹和文件一起上传，使用命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">此命令默认上传到OneDrive根目录</span></span><br><span class="line">onedrive-d '/root'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果上传到指定文件夹，就需要加-f参数</span></span><br><span class="line">onedrive-d -f RATS '/root'  #上传到OneDrive根目录的RATS文件夹</span><br><span class="line">onedrive-d -f RATS/RATS '/root'  #上传到OneDrive根目录RATS文件夹里的RATS文件夹</span><br></pre></td></tr></table></figure>
+<p>如果我们想直接查看<code>OneDrive</code>网盘目录的文件，使用命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">此命令只查看根目录文件</span></span><br><span class="line">onedrive -l</span><br><span class="line"><span class="meta">#</span><span class="bash">如果我们要查看根目录root文件夹里的文件</span></span><br><span class="line">onedrive -l /root</span><br></pre></td></tr></table></figure></div></div></div>
+<h4 id="Aria2自动上传"><a href="#Aria2自动上传" class="headerlink" title="Aria2自动上传"></a>Aria2自动上传</h4><p>使用宝塔面板或者SSH，进入<code>/root/.aria2</code>文件夹，新建文件<code>upload.sh</code></p>
+<p>编辑文件写入如下代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">GID="$1";</span><br><span class="line">FileNum="$2";</span><br><span class="line">File="$3";</span><br><span class="line">MaxSize="15728640"</span><br><span class="line">RemoteDIR="Download";  #上传到Onedrive的路径，默认为根目录，如果要上传到指定目录，方法看文章最后面。</span><br><span class="line">LocalDIR="/root/Download/";  #Aria2下载目录，记得最后面加上/</span><br><span class="line"></span><br><span class="line">if [[ -z $(echo "$FileNum" |grep -o '[0-9]*' |head -n1) ]]; then FileNum='0'; fi</span><br><span class="line">if [[ "$FileNum" -le '0' ]]; then exit 0; fi</span><br><span class="line">if [[ "$#" != '3' ]]; then exit 0; fi</span><br><span class="line"></span><br><span class="line">function LoadFile()&#123;</span><br><span class="line">  IFS_BAK=$IFS</span><br><span class="line">  IFS=$'\n'</span><br><span class="line">  if [[ ! -d "$LocalDIR" ]]; then return; fi</span><br><span class="line">  if [[ -e "$File" ]]; then</span><br><span class="line">    if [[ $(dirname "$File") == $(readlink -f $LocalDIR) ]]; then</span><br><span class="line">      ONEDRIVE="onedrive";</span><br><span class="line">    else</span><br><span class="line">      ONEDRIVE="onedrive-d";</span><br><span class="line">    fi</span><br><span class="line">    FileLoad="$&#123;File/#$LocalDIR&#125;"</span><br><span class="line">    while true</span><br><span class="line">      do</span><br><span class="line">        if [[ "$FileLoad" == '/' ]]; then return; fi</span><br><span class="line">        echo "$FileLoad" |grep -q '/';</span><br><span class="line">        if [[ "$?" == "0" ]]; then</span><br><span class="line">          FileLoad=$(dirname "$FileLoad");</span><br><span class="line">        else</span><br><span class="line">          break;</span><br><span class="line">        fi;</span><br><span class="line">      done;</span><br><span class="line">    if [[ "$FileLoad" == "$LocalDIR" ]]; then return; fi</span><br><span class="line">    if [[ -n "$RemoteDIR" ]]; then</span><br><span class="line">      Option=" -f $RemoteDIR";</span><br><span class="line">    else</span><br><span class="line">      Option="";</span><br><span class="line">    fi</span><br><span class="line">    EXEC="$(command -v $ONEDRIVE)";</span><br><span class="line">    if [[ -z "$EXEC" ]]; then return; fi</span><br><span class="line">    cd "$LocalDIR";</span><br><span class="line">    if [[ -e "$FileLoad" ]]; then</span><br><span class="line">      ItemSize=$(du -s "$FileLoad" |cut -f1 |grep -o '[0-9]*' |head -n1)</span><br><span class="line">      if [[ -z "$ItemSize" ]]; then return; fi</span><br><span class="line">      if [[ "$ItemSize" -ge "$MaxSize" ]]; then</span><br><span class="line">        echo -ne "\033[33m$File \033[0mtoo large to spik.\n";</span><br><span class="line">        return;</span><br><span class="line">      fi</span><br><span class="line">      eval "$&#123;EXEC&#125;$&#123;Option&#125;" \'"$&#123;FileLoad&#125;"\';</span><br><span class="line">      if [[ $? == '0' ]]; then</span><br><span class="line">        rm -rf "$FileLoad";</span><br><span class="line">      fi</span><br><span class="line">    fi</span><br><span class="line">  fi</span><br><span class="line">  IFS=$IFS_BAK</span><br><span class="line">&#125;</span><br><span class="line">LoadFile;</span><br></pre></td></tr></table></figure>
+<p>修改顶部两项配置，RemoteDIR是OneDrive中的文件夹名，填写<code>&quot;&quot;</code>则为上传至根目录。</p>
+<p>LocalDIR为Aria2下载的文件夹，之前安装时设置过。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#上传到Onedrive里的RATS目录，参数改为：RemoteDIR=&quot;RATS&quot;; </span><br><span class="line">#上传到Onedrive里的RATS目录里的RATS目录，参数改为：RemoteDIR=&quot;RATS/RATS&quot;;</span><br></pre></td></tr></table></figure>
+<p>如果你觉得上传速度较慢，可以编辑<code>/usr/local/etc/OneDrive/onedrive.cfg</code>，修改<code>threads</code>线程数，默认<code>2</code>。</p>
+<p><code>chmod +x upload.sh</code>修改权限，然后再到<code>Aria2</code>配置文件<code>aria.conf</code>中加上一行<code>on-download-complete=/root/.aria2/upload.sh</code>即可，后面为脚本的路径。最后重启<code>Aria2</code>生效。</p>
+<p>至此，我们的设置就全部完成了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得本文对您有帮助，欢迎打赏。</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="LixT 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="LixT 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+
+    
+      <div>
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <!--<p><span>本文标题:</span><a href="/onedrive.html">利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传</a></p>-->
+  <!--<p><span>文章作者:</span><a href="/" title="访问 LixT 的个人博客">LixT</a></p>-->
+  <!--<p><span>发布时间:</span>2019年01月03日 - 16:56</p>-->
+  
+  <p>
+  <strong>本文链接： </strong><a href="/onedrive.html" title="利用OneDrive搭建私人网盘并使用Aria2实现下载后自动上传">https://lixint.github.io/onedrive.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lixint.github.io/onedrive.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p>
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank" tittle="Attribution-NonCommercial-NoDerivatives 4.0 International">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！
+  </p>
+  <p>本文最后更新于<strong>2020年03月11日21:27</strong>可能会因为没有更新而失效，如已失效或需要修正，请留言！</p>
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OneDrive/" rel="tag"><i class="fa fa-tag" aria-hidden="true"></i>OneDrive</a>
+          
+            <a href="/tags/OneIndex/" rel="tag"><i class="fa fa-tag" aria-hidden="true"></i>OneIndex</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ubuntu.html" rel="next" title="ubuntu部分折腾记录">
+                <i class="fa fa-chevron-left"></i> ubuntu部分折腾记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/next-syntax.html" rel="prev" title="Next主题自带部分标签使用教程">
+                Next主题自带部分标签使用教程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright"> &copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LixT</span>
+
+  
+
+  
+</div>
+
+
+  
+
+<!--底部信息 -->
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+
+
+ 
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/motion.js?v=6.5.0"></script>
+
+
+  
+  
+
+
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/bootstrap.js?v=6.5.0"></script>
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  
+  <script src="//myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz',
+        appKey: 'TRe2e9a0df16Y70fU0xXXOO6',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz",
+                'X-LC-Key': "TRe2e9a0df16Y70fU0xXXOO6",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=6.5.0"></script>
+
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+
+
+</body>
+</html>

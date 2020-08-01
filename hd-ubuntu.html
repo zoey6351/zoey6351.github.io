@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.5.0',
+    sidebar: {"position":"left","width":240,"display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="手边闲着一个移动硬盘，于是折腾着装了个ubuntu，记录一下">
+<meta name="keywords" content="Ubuntu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动硬盘安装Ubuntu18.10折腾笔记">
+<meta property="og:url" content="https://lixint.github.io/hd-ubuntu.html">
+<meta property="og:site_name" content="LixT&#39;s Blog">
+<meta property="og:description" content="手边闲着一个移动硬盘，于是折腾着装了个ubuntu，记录一下">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/35626309.jpg">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/33964752.jpg">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/11084726.jpg">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/59832715.jpg">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/Screenshot%20from%202018-12-30%2005-36-47.png">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/68242781.jpg">
+<meta property="og:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/25127566.jpg">
+<meta property="og:updated_time" content="2019-01-02T09:20:55.906Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="移动硬盘安装Ubuntu18.10折腾笔记">
+<meta name="twitter:description" content="手边闲着一个移动硬盘，于是折腾着装了个ubuntu，记录一下">
+<meta name="twitter:image" content="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/35626309.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://lixint.github.io/hd-ubuntu.html">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>移动硬盘安装Ubuntu18.10折腾笔记 | LixT's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LixT's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">不务正业的日子</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    <div class="header-inner">
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-博客搭建教程">
+    <a href="/hexo-blog.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-globe"></i> <br>博客搭建教程</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+</div>
+    
+
+    
+
+
+    
+  
+  
+  
+    <style type="text/css">
+      .container .main-inner {width: auto;padding: auto;}
+      .content-wrap {
+          float: right;
+          position: relative;
+          right: 10%;
+          margin-left:auto;
+          margin-right:auto;
+      }
+      .sidebar {
+        margin-left: 10% !important;
+        float: left !important;
+        bottom: auto;
+      }
+    </style>
+  
+
+  
+  <style type="text/css">
+    p {margin: 0 0 0 0 !important;}
+  </style>
+  
+
+  
+
+    <main id="main" class="main">
+      <div class="main-inner">
+      
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="LixT">
+            
+              <p class="site-author-name" itemprop="name">LixT</p>
+              <p class="site-description motion-element" itemprop="description">Record & Share</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                    <span class="exturl" data-url="https://github.com/lixint" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</span>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                    <span class="exturl" data-url="mailto:li.xint8@gmail.com" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</span>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+					           
+                    <a href="http://techrecord.pw" rel="external nofollow" title="外面的世界">深坑</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+					           
+                    <a href="https://koakie.com" rel="external nofollow" title="koakie">koakie</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.</span> <span class="nav-text">安装步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#制作启动盘"><span class="nav-number">2.2.</span> <span class="nav-text">制作启动盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装GRUB4DOS引导"><span class="nav-number">2.3.</span> <span class="nav-text">安装GRUB4DOS引导</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理try-hd0-0-ext2问题"><span class="nav-number">2.4.</span> <span class="nav-text">处理try (hd0,0) ext2问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方案"><span class="nav-number">2.4.1.</span> <span class="nav-text">解决方案</span></a></li></ol></li></ol></li></ol></div>
+                       
+          </div>
+
+          <ul class="links-of-blogroll-list">
+          
+            <li class="links-of-blogroll-item">
+            
+              <a href="https://mo.m.taobao.com/union/1111_quan?pid=mm_122376214_176800399_51093450276" rel="external nofollow" title="undefined"><img src="https://i.loli.net/2018/12/06/5c08fc799da64.png" alt="淘宝大额优惠券" title="淘宝大额优惠券榜单"></a>
+            </li>
+          
+          </ul>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      
+
+      
+      
+
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lixint.github.io/hd-ubuntu.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LixT">
+      <meta itemprop="description" content="Record & Share">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LixT's Blog">
+    </span>
+
+    
+      <header class="post-header">
+        
+        
+          <h2 class="post-title" itemprop="name headline">移动硬盘安装Ubuntu18.10折腾笔记
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time itemprop="dateCreated datePublished" datetime="2018-12-30T12:45:37+08:00">2018-12-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time itemprop="dateModified" datetime="2019-01-02T17:20:55+08:00">2019-01-02</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/hd-ubuntu.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/hd-ubuntu.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/hd-ubuntu.html" class="leancloud_visitors" data-flag-title="移动硬盘安装Ubuntu18.10折腾笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">手边闲着一个移动硬盘，于是折腾着装了个ubuntu，记录一下</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        
+      
+      
+
+      
+        <p><hr style="margin: 10px 0"><em>本文最后更新于<b style="color:#ff0033">2019年01月02日17:20</b>可能会因为没有更新而失效，如已失效或需要修正，请留言！</em><hr style="margin: 10px 0"></p>
+<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>在往移动硬盘装之前，网上查了N多教程，的确是绕过了几个坑。莫名其妙就装好了，至今也是一头雾水</p>
+<p>中间涉及到引导的设置什么的，也没怎么搞懂。</p>
+<p>目前比较常见的坑：</p>
+<ol>
+<li>安装完成后不插移动硬盘无法启动原来的系统。</li>
+<li>安装完成后的通过USB启动无法进入ubuntu</li>
+<li>移动硬盘插到别的电脑上无法使用。</li>
+</ol>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><p>安装步骤主要参考的<span class="exturl" data-url="aHR0cHM6Ly9tenoucHViLzIwMTcvMTIvMjIvanVzdHBsYXkvbW9iaWxldWJ1bnR1Lw==" title="把Ubuntu16.04装进移动硬盘的惨痛实战"><a style="color:#ff0033">把Ubuntu16.04装进移动硬盘的惨痛实战</a><i class="fa fa-external-link"></i></span></p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><ol>
+<li>Ubuntu镜像，这个可以到<span class="exturl" data-url="aHR0cHM6Ly9taXJyb3JzLnR1bmEudHNpbmdodWEuZWR1LmNuLw==" title="清华大学开源镜像软件站"><a style="color:#ff0033">清华大学开源镜像软件站</a><i class="fa fa-external-link"></i></span>去下载，下载速度很快。</li>
+<li>启动盘制作软件：<span class="exturl" data-url="aHR0cHM6Ly91MTkxNDQzODYuY3RmaWxlLmNvbS9mcy8xOTE0NDM4Ni0zMjg1NzQ1MjA=" title="Universal-USB-Installer"><a style="color:#ff0033">Universal-USB-Installer</a><i class="fa fa-external-link"></i></span></li>
+<li>磁盘管理软件：<span class="exturl" data-url="aHR0cHM6Ly91MTkxNDQzODYuY3RmaWxlLmNvbS9mcy8xOTE0NDM4Ni0zMjg1NzU1ODM=" title="DiskGenius"><a style="color:#ff0033">DiskGenius</a><i class="fa fa-external-link"></i></span></li>
+<li>引导程序：<span class="exturl" data-url="aHR0cHM6Ly91MTkxNDQzODYuY3RmaWxlLmNvbS9mcy8xOTE0NDM4Ni0zMjg1NzQ0ODg=" title="GRUB4DOS"><a style="color:#ff0033">GRUB4DOS</a><i class="fa fa-external-link"></i></span></li>
+<li>硬件准备：<ol>
+<li>移动硬盘（或10G以上U盘）</li>
+<li>U盘（作安装启动盘和LiveCD）</li>
+</ol>
+</li>
+</ol>
+<h4 id="制作启动盘"><a href="#制作启动盘" class="headerlink" title="制作启动盘"></a>制作启动盘</h4><p>这个比较容易，把镜像下载好后，打开软件。按步骤选择镜像。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/35626309.jpg" alt="35626309"></p>
+<p>图片来自<span class="exturl" data-url="aHR0cHM6Ly9tenoucHViLzIwMTcvMTIvMjIvanVzdHBsYXkvbW9iaWxldWJ1bnR1Lw==" title="把Ubuntu16.04装进移动硬盘的惨痛实战"><a style="color:#ff0033">把Ubuntu16.04装进移动硬盘的惨痛实战</a><i class="fa fa-external-link"></i></span></p>
+<p>安装ubuntu</p>
+<p>U盘启动盘制作好后，插着U盘重启，Boot设置USB启动。等待加载出菜单后选择第一项<code>Try ubuntu without installing</code></p>
+<p>等待进入系统后，双击打开桌面上的<code>install Ubuntu</code>进入安装程序。</p>
+<p>由于中间没有截图。以文字描述。并不复杂</p>
+<p>首先是选择语言，菜单拉倒最后，选择中文。后面就都变成中文了。一步步操作即可。</p>
+<p>我这次安装的是Ubuntu18，中间可以选择<code>最小安装</code>，<code>下载安装更新以节约安装后的时间</code>这两项</p>
+<p>再后面有个安装类型。选择最下面的<code>其他</code>，进到盘符选择页面</p>
+<p>这个时候要保证移动硬盘也是连接的，如果选择盘符页面没有加载出移动硬盘来，可以点击后退再重新进到页面。</p>
+<p>在随后的这个界面中，假设/dev/sda是你的移动硬盘，选中其下的所有盘符，点击下面的“－”删去（相当于格式化），然后点击free space，点击下面的“＋”，按下图挂载三个partition：</p>
+<p>根目录（建议50GB以内）</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/33964752.jpg" alt="33964752"></p>
+<p>交换空间（建议与内存大小相同）</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/11084726.jpg" alt="11084726"></p>
+<p>home（用户文件等均在此part下，建议分配较多的空间）</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/59832715.jpg" alt="59832715"></p>
+<p>我的操作界面是中文的，但跟这个操作步骤是一样的。</p>
+<ul>
+<li><p>无需挂载boot类型的partition</p>
+</li>
+<li><p>记得在Device for boot loader installation中选择你的移动硬盘，否则开机引导会被grub2无情整合导致不插硬盘启动不了。这个地方我试过两次，一次是选了移动硬盘，一次是选了移动硬盘下挂载<code>/</code>的分区，最后都出了问题，所以没看出区别。</p>
+</li>
+</ul>
+<p>注意：这里设置完成点击安装时可能会有如下提示：</p>
+<p><strong>“分配到/的分区/dev/sdc1开始于3584字节,使用磁盘的最小对齐,这可能造成非常差的性能…”</strong></p>
+<p>出现这个问题的原因不是很明确，我用了网上的方法，重新用DiskGenius对硬盘进行了分区。</p>
+<p>新建一个Linux Native格式的分区，作为挂载<code>/</code>的分区</p>
+<p>新建一个Linux Swap格式的分区作为交换空间</p>
+<p>剩余的格式随意，作为挂载<code>/home</code>的分区</p>
+<p>这样在安装时就不需要再建立分区，直接选择相应的分区然后进行挂载就行了。</p>
+<p>点击安装之前留意一下移动硬盘的盘符，例如我的电脑是固态+机械双硬盘，插上移动硬盘的话就是三个硬盘，分别就是 固态<code>/dev/sda</code>，电脑的机械硬盘<code>/dev/sdb/</code>，机械硬盘四个分区，就分别是<code>/dev/sdb 1</code> ~ <code>/dev/sdb 4</code> ,同理移动硬盘是<code>/dev/sdc 1</code> 开始的。记一下挂载<code>/</code>的盘符号。后面可能会用到。</p>
+<p>选择地区的时候，我根据网上的建议选择了台北。实际上台北的速度也不快，可能是跟地理位置有关。重新安装时选择上海，10分钟左右安装完毕，USB3.0的话应该会更快。</p>
+<hr>
+<p>以下部分属于我对着教程的个人理解，可能是(八九成)是错的</p>
+<p>安装完毕后提示是否重启，不要点击重启，一定先点一下继续，这样移动硬盘会加载回来。然后用ubuntu自带的文件管理器打开移动硬盘安装盘的根目录（”/“挂载盘），用gedit打开”/etc/fstab”，把挂载点为”/“的盘符（如/dev/sdc5）和UUID记下来。</p>
+<p>这里不知道是不是我安装的时候有什么问题，打开后没有发现挂载<code>/</code>的盘符。所以后面要用到盘符的时候我填的就是之前安装时记下来的盘符号，可能出问题也是因为这个。</p>
+<p>这个UUID的获取，用文件管理器打开移动硬盘挂载<code>/</code>的目录，右键<code>open in Terminal</code></p>
+<p><code>ubuntu/</code>后面的这一串应该就是UUID</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/Screenshot%20from%202018-12-30%2005-36-47.png" alt="Screenshot from 2018-12-30 05-36-47"></p>
+<p>然后使用命令<code>cat /proc/version</code> 获取内核版本号（如4.10.0-28），也记录下来。</p>
+<h4 id="安装GRUB4DOS引导"><a href="#安装GRUB4DOS引导" class="headerlink" title="安装GRUB4DOS引导"></a>安装GRUB4DOS引导</h4><p>趁热打铁，下载<span class="exturl" data-url="aHR0cHM6Ly91MTkxNDQzODYuY3RmaWxlLmNvbS9mcy8xOTE0NDM4Ni0zMjg1NzQ0ODg=" title="GRUB4DOS"><a style="color:#ff0033">GRUB4DOS</a><i class="fa fa-external-link"></i></span>， 解压后有一个menu.lst，将其中的<code>4.10.0-28</code> 全部替换为你的内核版本号，将<code>8578bdcd-8385-4121-80c4-d48cc0b2e282</code> 全部替换为你的UUID，将<code>(hd0,0)</code> 的0全部替换为你的盘符号减1的值（如/dev/sdc5则把(hd0,0)替换为(hd0,4)），保存修改。</p>
+<p>在menu.lst文件所在目录下右键open in terminal，使用命令<code>sudo cp menu.lst grldr /media/ubuntu/UUID</code> （将UUID替换为刚记下的UUID）。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/68242781.jpg" alt="68242781"></p>
+<p>关闭计算机，用同样的方法进入boot menu，选择打开WINDOWS。在WINDOWS下使用<span class="exturl" data-url="aHR0cHM6Ly91MTkxNDQzODYuY3RmaWxlLmNvbS9mcy8xOTE0NDM4Ni0zMjg1NzQ0ODg=" title="GRUB4DOS"><a style="color:#ff0033">GRUB4DOS</a><i class="fa fa-external-link"></i></span>中的grubinst_gui.exe，一定要以右键以管理员身份打开，否则刷新不出磁盘来。在磁盘中选择你的移动硬盘，下面勾选Grub第二版，点击安装。</p>
+<p><img src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/hd-ubuntu/25127566.jpg" alt="25127566"></p>
+<p>现在你的移动硬盘已经可以到处使了！想进入ubuntu的时候，在开机的时候进入boot menu切换ubuntu即可。</p>
+<p><strong>注意：升级内核后须手动修改menu.lst中的kernel、initrd项，新内核方可生效！</strong></p>
+<p>至此，我的折腾就完毕了。</p>
+<h4 id="处理try-hd0-0-ext2问题"><a href="#处理try-hd0-0-ext2问题" class="headerlink" title="处理try (hd0,0) ext2问题"></a>处理try (hd0,0) ext2问题</h4><p>安装完成后，我的就一直出现这个问题，</p>
+<h5 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h5><p>由于目的是使用grub整合windows和ubuntu，于是我使用了有UEFI引导的LiveCD（必须用UEFI进入，如果不支持UEFI，在使用Universal-USB-Installer时选中格式化U盘的选项再装一次，直到支持UEFI）。</p>
+<p>使用LiveCD进入try without install的ubuntu系统后，我们选择使用boot-repair来修复引导，它会用grub整合windows和ubuntu，这也是我们想要的（注意，制作移动硬盘ubuntu时，这往往不是我们想要的。但它会在windows盘EFI分区创建好ubuntu的引导，这可以帮助我们在无法使用移动硬盘的机器上手动创建efi引导从而曲线救国）。</p>
+<span class="exturl" data-url="aHR0cHM6Ly9qaW5neWFuLmJhaWR1LmNvbS9hcnRpY2xlLzU1NTNmYTgyY2Q0OGE3NjVhMjM5MzRhZS5odG1s" title="如何使用boot-repair修复引导？"><a style="color:#ff0033">如何使用boot-repair修复引导？</a><i class="fa fa-external-link"></i></span>
+<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbmh1aW5jdS9hcnRpY2xlL2RldGFpbHMvNzg5MjA0NjM=" title="Win 10 +Ubuntu 16.04双硬盘双系统，启动报错 Try (hd0,4): EXT2:，亲测成功修复办法"><a style="color:#ff0033">Win 10 +Ubuntu 16.04双硬盘双系统，启动报错 Try (hd0,4): EXT2:，亲测成功修复办法</a><i class="fa fa-external-link"></i></span>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:yannubuntu/boot-repair &amp;&amp; sudo apt-get update  </span><br><span class="line">sudo apt-get install -y boot-repair &amp;&amp; boot-repair</span><br></pre></td></tr></table></figure>
+<p>启动Boot Repair：</p>
+<p>进行重新安装Grub2引导，内置会自动确定你的/boot分区，/根目录分区：（不确定的可以先选修复，但是修复一般都没用）</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得本文对您有帮助，欢迎打赏。</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="LixT 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="LixT 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+
+    
+      <div>
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <!--<p><span>本文标题:</span><a href="/hd-ubuntu.html">移动硬盘安装Ubuntu18.10折腾笔记</a></p>-->
+  <!--<p><span>文章作者:</span><a href="/" title="访问 LixT 的个人博客">LixT</a></p>-->
+  <!--<p><span>发布时间:</span>2018年12月30日 - 12:45</p>-->
+  
+  <p>
+  <strong>本文链接： </strong><a href="/hd-ubuntu.html" title="移动硬盘安装Ubuntu18.10折腾笔记">https://lixint.github.io/hd-ubuntu.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://lixint.github.io/hd-ubuntu.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p>
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank" tittle="Attribution-NonCommercial-NoDerivatives 4.0 International">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处！
+  </p>
+  <p>本文最后更新于<strong>2019年01月02日17:20</strong>可能会因为没有更新而失效，如已失效或需要修正，请留言！</p>
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ubuntu/" rel="tag"><i class="fa fa-tag" aria-hidden="true"></i>Ubuntu</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/linuxcmd.html" rel="next" title="Linux常用命令--基础篇">
+                <i class="fa fa-chevron-left"></i> Linux常用命令--基础篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ubuntu.html" rel="prev" title="ubuntu部分折腾记录">
+                ubuntu部分折腾记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright"> &copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LixT</span>
+
+  
+
+  
+</div>
+
+
+  
+
+<!--底部信息 -->
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+
+
+ 
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/motion.js?v=6.5.0"></script>
+
+
+  
+  
+
+
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  <script type="text/javascript" src="https://myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/src/bootstrap.js?v=6.5.0"></script>
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  
+  <script src="//myself-1252916396.cos.ap-shanghai.myqcloud.com/jtsource/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz',
+        appKey: 'TRe2e9a0df16Y70fU0xXXOO6',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "ba8rsHTrxwePQYypl1mLtlkM-gzGzoHsz",
+                'X-LC-Key': "TRe2e9a0df16Y70fU0xXXOO6",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/exturl.js?v=6.5.0"></script>
+
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+
+
+</body>
+</html>
