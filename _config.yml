@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
-keywords:
-author: John Doe
+title: Ambesonne
+subtitle: A Professional shower curtains seller.
+description: Ambesonne shower curtains, spa waterfall unique nautical clorful flower national parks shower curtain.
+keywords: Ambesonne shower curtains, Ambesonne shower curtain, Ambesonne curtains
+author: Ambesonne
 language: en
 timezone: ''
 
@@ -82,7 +82,7 @@ prismjs:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 10
+  per_page: 30
   order_by: -date
 
 # Category & Tag
